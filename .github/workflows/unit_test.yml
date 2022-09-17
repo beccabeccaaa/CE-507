@@ -38,4 +38,4 @@ jobs:
     - name: Test with unittest
       run: |
         ### Run your tests ###
-        #python -m unittest myAwesomeModule.py
+        python -m unittest src/basis.py
