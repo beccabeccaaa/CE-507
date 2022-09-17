@@ -1,3 +1,6 @@
+import unittest
+import numpy
+
 class Test_changeOfBasis( unittest.TestCase ):
     def test_standardR2BasisRotate( self ):
         b1 = numpy.eye(2)
