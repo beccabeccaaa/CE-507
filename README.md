@@ -16,6 +16,6 @@ Run unit test on code:
         Example: python3 -m unittest src/basis.py
 
 Show/hide hidden files in Finder:
-    shift >> command >> period
+    (shift) >> (command) >> (.)
 
 ```
