@@ -1,7 +1,7 @@
 #from gettext import npgettext
 import sympy
-import matplotlib.pyplot as plt
 import numpy as np
+import matplotlib.pyplot as plt
 
 #a is the value at which the expansion is centered
 #x is the variable that remains
@@ -17,21 +17,22 @@ def taylorExpansion(fun, a, order):
         print(t)
     return t
 
-x = np.linspace(-5 ,5 ,100)
-y = taylorExpansion(np.sin(np.pi * x), 0, 2)
+#Create symbolic function & taylor expansion
+x = sympy.symbols('x')
+fun = sympy.sin(sympy.pi * x)
+t = taylorExpansion(fun, 0, 4) #y
 
-# setting the axes at the centre
-fig = plt.figure()
-ax = fig.add_subplot(1, 1, 1)
-ax.spines['left'].set_position('center')
-ax.spines['bottom'].set_position('zero')
-ax.spines['right'].set_color('none')
-ax.spines['top'].set_color('none')
-ax.xaxis.set_ticks_position('bottom')
-ax.yaxis.set_ticks_position('left')
+#Evaluate function and taylor expansion to create plot data
+N = 1000
+px = np.linspace( -1, 1, N )
+py = np.zeros( N )
+fy = np.zeros( N )
+for i in range( 0, N ):
+    fy[i] = fun.subs( x, px[i] )
+    py[i] = t.subs( x, px[i] )
 
-# plot the function
-plt.plot(x, y, 'r')
-
-# show the plot
+#Create the plot
+fig, ax = plt.subplots()
+ax.plot( px, fy, linewidth=2.0)
+ax.plot( px, py, linewidth=2.0)
 plt.show()
