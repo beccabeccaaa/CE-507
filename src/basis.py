@@ -22,14 +22,6 @@ def changeOfBasis( b1, b2, x1 ):
 def evaluateMonomialBasis1D(degree, variate):
     return variate**degree
 
-#def evalLegendreBasis1D(degree, variate, index):
-    #nodes = np.linspace(-1, 1, degree + 1) #This divides the domain into degree elements using degree + 1 nodes
-    #val = 1
-    #for i in range(0, degree + 1):
-        #if i != index:
-            #val = val * ((variate - nodes[i]) / (nodes[index] - nodes[i]))
-    #return val
-
 def evalLegendreBasis1D(degree, variate): #Variate is like the x-value, or in this case, xi
     #set val here
     if degree == 0:
@@ -65,7 +57,6 @@ def evaluateBernsteinBasis1D(variate, degree, basis_idx): #Defined on interval [
     #basis_idx = i (from book equation)
     #degree = p (from book equation)
     coefficient = binomialCoefficients(degree + 1, basis_idx)
-    #variate = (variate - (-1)) / 2
     val = coefficient * (variate**basis_idx) * (1 - variate)**(degree - basis_idx)
     return val
 
@@ -176,4 +167,5 @@ class Test_evaluateBernsteinBasis1D( unittest.TestCase ):
         self.assertAlmostEqual( first = evaluateBernsteinBasis1D( variate = +1, degree = 2, basis_idx = 0 ), second = 0.00, delta = 1e-12 )
         self.assertAlmostEqual( first = evaluateBernsteinBasis1D( variate = +1, degree = 2, basis_idx = 1 ), second = 0.00, delta = 1e-12 )
         self.assertAlmostEqual( first = evaluateBernsteinBasis1D( variate = +1, degree = 2, basis_idx = 2 ), second = 1.00, delta = 1e-12 )
+
           
