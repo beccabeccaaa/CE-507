@@ -1,6 +1,7 @@
 import unittest
 import math
 import numpy as np
+import sympy
 
 #b1 (C, Image basis)
 #b2 (D, Pre-image basis)
@@ -50,6 +51,22 @@ def evaluateLagrangeBasis1D(variate, degree, basis_idx):
             numerator = variate - nodes[i]
             denominator = nodes[basis_idx] - nodes[i]
             val = val * numerator / denominator
+    return val
+
+def binomialCoefficients(n, k): #n is equal to degree of polynomial, k is the index of the basis function (n + 1 basis functions total)
+    numerator = sympy.factorial(n)
+    if k == 0:
+        denominator = numerator
+    else:
+        denominator = sympy.factorial(k) * sympy.factorial(n - k)
+    return numerator/denominator
+
+def evaluateBernsteinBasis1D(variate, degree, basis_idx): #Defined on interval [0, 1]
+    #basis_idx = i (from book equation)
+    #degree = p (from book equation)
+    coefficient = binomialCoefficients(degree + 1, basis_idx)
+    #variate = (variate - (-1)) / 2
+    val = coefficient * (variate**basis_idx) * (1 - variate)**(degree - basis_idx)
     return val
 
 class Test_changeOfBasis( unittest.TestCase ):
@@ -140,4 +157,23 @@ class Test_evaluateLagrangeBasis1D( unittest.TestCase ):
         self.assertAlmostEqual( first = evaluateLagrangeBasis1D( variate =  0, degree = 2, basis_idx = 2 ), second = 0.0, delta = 1e-12 )
         self.assertAlmostEqual( first = evaluateLagrangeBasis1D( variate = +1, degree = 2, basis_idx = 0 ), second = 0.0, delta = 1e-12 )
         self.assertAlmostEqual( first = evaluateLagrangeBasis1D( variate = +1, degree = 2, basis_idx = 1 ), second = 0.0, delta = 1e-12 )
-        self.assertAlmostEqual( first = evaluateLagrangeBasis1D( variate = +1, degree = 2, basis_idx = 2 ), second = 1.0, delta = 1e-12 )     
+        self.assertAlmostEqual( first = evaluateLagrangeBasis1D( variate = +1, degree = 2, basis_idx = 2 ), second = 1.0, delta = 1e-12 )   
+
+class Test_evaluateBernsteinBasis1D( unittest.TestCase ):
+    def test_linearBernstein( self ):
+        self.assertAlmostEqual( first = evaluateBernsteinBasis1D( variate = -1, degree = 1, basis_idx = 0 ), second = 1.0, delta = 1e-12 )
+        self.assertAlmostEqual( first = evaluateBernsteinBasis1D( variate = -1, degree = 1, basis_idx = 1 ), second = 0.0, delta = 1e-12 )
+        self.assertAlmostEqual( first = evaluateBernsteinBasis1D( variate = +1, degree = 1, basis_idx = 0 ), second = 0.0, delta = 1e-12 )
+        self.assertAlmostEqual( first = evaluateBernsteinBasis1D( variate = +1, degree = 1, basis_idx = 1 ), second = 1.0, delta = 1e-12 )
+
+    def test_quadraticBernstein( self ):
+        self.assertAlmostEqual( first = evaluateBernsteinBasis1D( variate = -1, degree = 2, basis_idx = 0 ), second = 1.00, delta = 1e-12 )
+        self.assertAlmostEqual( first = evaluateBernsteinBasis1D( variate = -1, degree = 2, basis_idx = 1 ), second = 0.00, delta = 1e-12 )
+        self.assertAlmostEqual( first = evaluateBernsteinBasis1D( variate = -1, degree = 2, basis_idx = 2 ), second = 0.00, delta = 1e-12 )
+        self.assertAlmostEqual( first = evaluateBernsteinBasis1D( variate =  0, degree = 2, basis_idx = 0 ), second = 0.25, delta = 1e-12 )
+        self.assertAlmostEqual( first = evaluateBernsteinBasis1D( variate =  0, degree = 2, basis_idx = 1 ), second = 0.50, delta = 1e-12 )
+        self.assertAlmostEqual( first = evaluateBernsteinBasis1D( variate =  0, degree = 2, basis_idx = 2 ), second = 0.25, delta = 1e-12 )
+        self.assertAlmostEqual( first = evaluateBernsteinBasis1D( variate = +1, degree = 2, basis_idx = 0 ), second = 0.00, delta = 1e-12 )
+        self.assertAlmostEqual( first = evaluateBernsteinBasis1D( variate = +1, degree = 2, basis_idx = 1 ), second = 0.00, delta = 1e-12 )
+        self.assertAlmostEqual( first = evaluateBernsteinBasis1D( variate = +1, degree = 2, basis_idx = 2 ), second = 1.00, delta = 1e-12 )
+          
