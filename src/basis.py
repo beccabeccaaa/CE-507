@@ -17,6 +17,9 @@ def changeOfBasis( b1, b2, x1 ):
     #x2 = T @ x1
     return x2, T
 
+def evaluateMonomialBasis1D(degree, variate):
+    return variate**degree
+
 class Test_changeOfBasis( unittest.TestCase ):
     def test_standardR2BasisRotate( self ):
         b1 = numpy.eye(2) #This is a 2x2 identity matrix, row vectors
@@ -50,3 +53,15 @@ class Test_changeOfBasis( unittest.TestCase ):
         v2 = b2 @ x2
         self.assertTrue( numpy.allclose( x2, numpy.array( [0.0, 1.0] ) ) )
         self.assertTrue( numpy.allclose( v1, v2 ) )
+
+
+class Test_evaluateMonomialBasis1D( unittest.TestCase ):
+   def test_basisAtBounds( self ):
+       self.assertAlmostEqual( first = evaluateMonomialBasis1D( degree = 0, variate = 0 ), second = 1.0, delta = 1e-12 )
+       for p in range( 1, 11 ):
+           self.assertAlmostEqual( first = evaluateMonomialBasis1D( degree = p, variate = 0 ), second = 0.0, delta = 1e-12 )
+           self.assertAlmostEqual( first = evaluateMonomialBasis1D( degree = p, variate = 1 ), second = 1.0, delta = 1e-12 )
+
+   def test_basisAtMidpoint( self ):
+       for p in range( 0, 11 ):
+           self.assertAlmostEqual( first = evaluateMonomialBasis1D( degree = p, variate = 0.5 ), second = 1 / ( 2**p ), delta = 1e-12 )       
