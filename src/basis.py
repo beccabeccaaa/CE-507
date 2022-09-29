@@ -37,12 +37,20 @@ def evalLegendreBasis1D(degree, variate): #Variate is like the x-value, or in th
         val = variate
     else:
         i = degree - 1
-        term_1 = i * evalLegendreBasis1D( degree = i - 1, variate = variate)
-        term_2 = (2 * i + 1) * variate * evalLegendreBasis1D( degree = i, variate = variate )
+        term_1 = i * evalLegendreBasis1D(degree = i - 1, variate = variate)
+        term_2 = (2 * i + 1) * variate * evalLegendreBasis1D(degree = i, variate = variate)
         val = (term_2 - term_1) / (i + 1)
     return val
 
-evalLegendreBasis1D(4, )
+def evaluateLagrangeBasis1D(variate, degree, basis_idx):
+    nodes = np.linspace(-1, 1, degree + 1) #This divides the domain into degree elements using degree + 1 nodes
+    val = 1
+    for i in range(0, degree + 1):
+        if i != basis_idx:
+            numerator = variate - nodes[i]
+            denominator = nodes[basis_idx] - nodes[i]
+            val = val * numerator / denominator
+    return val
 
 class Test_changeOfBasis( unittest.TestCase ):
     def test_standardR2BasisRotate( self ):
@@ -114,4 +122,22 @@ class Test_evalLegendreBasis1D( unittest.TestCase ):
     def test_cubic_at_roots( self ):
         self.assertAlmostEqual( first = evalLegendreBasis1D( degree = 3, variate = -math.sqrt( 3 / 5 ) ), second = 0.0, delta = 1e-12 )
         self.assertAlmostEqual( first = evalLegendreBasis1D( degree = 3, variate = 0 ), second = 0.0, delta = 1e-12 )
-        self.assertAlmostEqual( first = evalLegendreBasis1D( degree = 3, variate = +math.sqrt( 3 / 5 ) ), second = 0.0, delta = 1e-12 )     
+        self.assertAlmostEqual( first = evalLegendreBasis1D( degree = 3, variate = +math.sqrt( 3 / 5 ) ), second = 0.0, delta = 1e-12 )
+
+class Test_evaluateLagrangeBasis1D( unittest.TestCase ):
+    def test_linearLagrange( self ):
+        self.assertAlmostEqual( first = evaluateLagrangeBasis1D( variate = -1, degree = 1, basis_idx = 0 ), second = 1.0, delta = 1e-12 )
+        self.assertAlmostEqual( first = evaluateLagrangeBasis1D( variate = -1, degree = 1, basis_idx = 1 ), second = 0.0, delta = 1e-12 )
+        self.assertAlmostEqual( first = evaluateLagrangeBasis1D( variate = +1, degree = 1, basis_idx = 0 ), second = 0.0, delta = 1e-12 )
+        self.assertAlmostEqual( first = evaluateLagrangeBasis1D( variate = +1, degree = 1, basis_idx = 1 ), second = 1.0, delta = 1e-12 )
+
+    def test_quadraticLagrange( self ):
+        self.assertAlmostEqual( first = evaluateLagrangeBasis1D( variate = -1, degree = 2, basis_idx = 0 ), second = 1.0, delta = 1e-12 )
+        self.assertAlmostEqual( first = evaluateLagrangeBasis1D( variate = -1, degree = 2, basis_idx = 1 ), second = 0.0, delta = 1e-12 )
+        self.assertAlmostEqual( first = evaluateLagrangeBasis1D( variate = -1, degree = 2, basis_idx = 2 ), second = 0.0, delta = 1e-12 )
+        self.assertAlmostEqual( first = evaluateLagrangeBasis1D( variate =  0, degree = 2, basis_idx = 0 ), second = 0.0, delta = 1e-12 )
+        self.assertAlmostEqual( first = evaluateLagrangeBasis1D( variate =  0, degree = 2, basis_idx = 1 ), second = 1.0, delta = 1e-12 )
+        self.assertAlmostEqual( first = evaluateLagrangeBasis1D( variate =  0, degree = 2, basis_idx = 2 ), second = 0.0, delta = 1e-12 )
+        self.assertAlmostEqual( first = evaluateLagrangeBasis1D( variate = +1, degree = 2, basis_idx = 0 ), second = 0.0, delta = 1e-12 )
+        self.assertAlmostEqual( first = evaluateLagrangeBasis1D( variate = +1, degree = 2, basis_idx = 1 ), second = 0.0, delta = 1e-12 )
+        self.assertAlmostEqual( first = evaluateLagrangeBasis1D( variate = +1, degree = 2, basis_idx = 2 ), second = 1.0, delta = 1e-12 )     
