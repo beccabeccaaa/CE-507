@@ -24,15 +24,15 @@ t = taylorExpansion(fun, 0, 4) #y
 
 #Evaluate function and taylor expansion to create plot data
 N = 1000
-px = np.linspace( -1, 1, N )
-py = np.zeros( N )
-fy = np.zeros( N )
-for i in range( 0, N ):
-    fy[i] = fun.subs( x, px[i] )
-    py[i] = t.subs( x, px[i] )
+px = np.linspace(-1, 1, N)
+py = np.zeros(N)
+fy = np.zeros(N)
+for i in range(0, N ):
+    fy[i] = fun.subs(x, px[i])
+    py[i] = t.subs(x, px[i])
 
 #Create the plot
 fig, ax = plt.subplots()
-ax.plot( px, fy, linewidth=2.0)
-ax.plot( px, py, linewidth=2.0)
+ax.plot(px, fy, linewidth=2.0)
+ax.plot(px, py, linewidth=2.0)
 plt.show()
