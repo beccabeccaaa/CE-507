@@ -1,5 +1,6 @@
 import unittest
-import numpy
+import math
+import numpy as np
 
 #b1 (C, Image basis)
 #b2 (D, Pre-image basis)
@@ -11,20 +12,43 @@ import numpy
 
 def changeOfBasis( b1, b2, x1 ):
     #Multiply the inverse of b2 by b1 without really taking the inverse of b2
-    T = numpy.linalg.solve( b2, b1 ) #Row vectors
+    T = np.linalg.solve( b2, b1 ) #Row vectors
     #Multiply T by x1
-    x2 = numpy.dot( T, x1 ) #Column vector
+    x2 = np.dot( T, x1 ) #Column vector
     #x2 = T @ x1
     return x2, T
 
 def evaluateMonomialBasis1D(degree, variate):
     return variate**degree
 
+#def evalLegendreBasis1D(degree, variate, index):
+    #nodes = np.linspace(-1, 1, degree + 1) #This divides the domain into degree elements using degree + 1 nodes
+    #val = 1
+    #for i in range(0, degree + 1):
+        #if i != index:
+            #val = val * ((variate - nodes[i]) / (nodes[index] - nodes[i]))
+    #return val
+
+def evalLegendreBasis1D(degree, variate): #Variate is like the x-value, or in this case, xi
+    #set val here
+    if degree == 0:
+        val = 1.0
+    elif degree == 1:
+        val = variate
+    else:
+        i = degree - 1
+        term_1 = i * evalLegendreBasis1D( degree = i - 1, variate = variate)
+        term_2 = (2 * i + 1) * variate * evalLegendreBasis1D( degree = i, variate = variate )
+        val = (term_2 - term_1) / (i + 1)
+    return val
+
+evalLegendreBasis1D(4, )
+
 class Test_changeOfBasis( unittest.TestCase ):
     def test_standardR2BasisRotate( self ):
-        b1 = numpy.eye(2) #This is a 2x2 identity matrix, row vectors
-        b2 = numpy.array([ [0, 1], [-1, 0] ] ).T #Column vectors; WATCH OUT
-        x1 = numpy.array( [0.5, 0.5] ).T #Column vector
+        b1 = np.eye(2) #This is a 2x2 identity matrix, row vectors
+        b2 = np.array([ [0, 1], [-1, 0] ] ).T #Column vectors; WATCH OUT
+        x1 = np.array( [0.5, 0.5] ).T #Column vector
 
         #b1 = numpy.array([ [1, 4], [3, 1] ]) #Row vectors
         #b2 = numpy.array([ [17, 7], [7, 10] ]) #Row vectors
@@ -41,18 +65,18 @@ class Test_changeOfBasis( unittest.TestCase ):
         #print( "T = ", T)
         #print("x1 = ", x1)
         #print("x2 = ", x2)
-        self.assertTrue( numpy.allclose( v1, v2 ) ) #allclose is a tolerance
+        self.assertTrue( np.allclose( v1, v2 ) ) #allclose is a tolerance
         #self.assertTrue( numpy.allclose( T, R ) )
 
     def test_standardR2BasisSkew( self ):
-        b1 = numpy.eye(2)
-        b2 = numpy.array([ [0, 1], [0.5, 0.5] ] ).T
-        x1 = numpy.array( [0.5, 0.5] ).T
+        b1 = np.eye(2)
+        b2 = np.array([ [0, 1], [0.5, 0.5] ] ).T
+        x1 = np.array( [0.5, 0.5] ).T
         x2, T = changeOfBasis( b1, b2, x1 )
         v1 = b1 @ x1
         v2 = b2 @ x2
-        self.assertTrue( numpy.allclose( x2, numpy.array( [0.0, 1.0] ) ) )
-        self.assertTrue( numpy.allclose( v1, v2 ) )
+        self.assertTrue( np.allclose( x2, np.array( [0.0, 1.0] ) ) )
+        self.assertTrue( np.allclose( v1, v2 ) )
 
 
 class Test_evaluateMonomialBasis1D( unittest.TestCase ):
@@ -64,4 +88,30 @@ class Test_evaluateMonomialBasis1D( unittest.TestCase ):
 
    def test_basisAtMidpoint( self ):
        for p in range( 0, 11 ):
-           self.assertAlmostEqual( first = evaluateMonomialBasis1D( degree = p, variate = 0.5 ), second = 1 / ( 2**p ), delta = 1e-12 )       
+           self.assertAlmostEqual( first = evaluateMonomialBasis1D( degree = p, variate = 0.5 ), second = 1 / ( 2**p ), delta = 1e-12 ) 
+
+class Test_evalLegendreBasis1D( unittest.TestCase ):
+    def test_basisAtBounds( self ):
+        for p in range( 0, 2 ):
+            if ( p % 2 == 0 ):
+                self.assertAlmostEqual( first = evalLegendreBasis1D( degree = p, variate = -1 ), second = +1.0, delta = 1e-12 )
+            else:
+                self.assertAlmostEqual( first = evalLegendreBasis1D( degree = p, variate = -1 ), second = -1.0, delta = 1e-12 )
+            self.assertAlmostEqual( first = evalLegendreBasis1D( degree = p, variate = +1 ), second = 1.0, delta = 1e-12 )
+
+    def test_constant( self ):
+        for x in np.linspace( -1, 1, 100 ):
+            self.assertAlmostEqual( first = evalLegendreBasis1D( degree = 0, variate = x ), second = 1.0, delta = 1e-12 )
+
+    def test_linear( self ):
+        for x in np.linspace( -1, 1, 100 ):
+            self.assertAlmostEqual( first = evalLegendreBasis1D( degree = 1, variate = x ), second = x, delta = 1e-12 )
+
+    def test_quadratic_at_roots( self ):
+        self.assertAlmostEqual( first = evalLegendreBasis1D( degree = 2, variate = -1.0 / math.sqrt(3.0) ), second = 0.0, delta = 1e-12 )
+        self.assertAlmostEqual( first = evalLegendreBasis1D( degree = 2, variate = +1.0 / math.sqrt(3.0) ), second = 0.0, delta = 1e-12 )
+
+    def test_cubic_at_roots( self ):
+        self.assertAlmostEqual( first = evalLegendreBasis1D( degree = 3, variate = -math.sqrt( 3 / 5 ) ), second = 0.0, delta = 1e-12 )
+        self.assertAlmostEqual( first = evalLegendreBasis1D( degree = 3, variate = 0 ), second = 0.0, delta = 1e-12 )
+        self.assertAlmostEqual( first = evalLegendreBasis1D( degree = 3, variate = +math.sqrt( 3 / 5 ) ), second = 0.0, delta = 1e-12 )     
