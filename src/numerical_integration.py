@@ -5,7 +5,7 @@ import sympy
 
 def getRiemannQuadrature(num_points):
     if num_points < 1:
-        raise(Exception("num_points must be at least 1"))
+        raise(Exception("num_points_MUST_BE_INTEGER_GEQ_1"))
     num_bounds = num_points + 1
     x = np.linspace(-1, 1, num_points + num_bounds)
     xQuadrature = x[1::2] #Take every second index starting from index 1
