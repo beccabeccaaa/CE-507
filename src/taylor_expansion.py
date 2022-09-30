@@ -1,8 +1,9 @@
-import unittest
 import math
 import sympy
 import numpy as np
 import matplotlib.pyplot as plt
+import basis
+from scipy import integrate
 
 #a is the value at which the expansion is centered
 #x is the variable that remains
@@ -59,12 +60,31 @@ def plotTaylorErfc():
     functionLabel = "erfc(x)"
     plot(x, fun, domain, degreeValues, functionLabel)
 
+def plotErrorTaylorErfc():
+    x = sympy.symbols('x')
+    fun = sympy.erfc(x) #Create symbolic function
+    degreeValues = [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10]
+    error = [] #Initializes empty list to later append to
+    for degree in degreeValues:
+        t = taylorExpansion(fun, 0, degree)
+        domain = [-2, 2]
+        error.append(integrate.quad(sympy.lambdify(x, abs(fun - t)), domain[0], domain[1], limit = 100000)[0])
+    print(error)
+    fig,ax = plt.subplots()
+    ax.plot(degreeValues, error)
+    plt.yscale("Log")
+    #plotError(x, fun, domain, degreeValues, functionLabel)
+    plt.show()
+
+#Ask about math.comb
+
 def plotMonomialBasis(highDegree):
     x = np.linspace(0, 1)
     for degree in range(0, highDegree):
         plt.plot(x, x**degree)
     plt.show()
 
-plotTaylorSin()
-plotTaylorE()
-plotTaylorErfc()
+#plotTaylorSin()
+#plotTaylorE()
+#plotTaylorErfc()
+plotErrorTaylorErfc()
