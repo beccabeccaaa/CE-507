@@ -11,11 +11,11 @@ import sympy
 #v2 (Dd)
 #T (Change of basis operator, = D^-1 * C)
 
-def changeOfBasis( b1, b2, x1 ):
+def changeOfBasis(b1, b2, x1):
     #Multiply the inverse of b2 by b1 without really taking the inverse of b2
-    T = np.linalg.solve( b2, b1 ) #Row vectors
+    T = np.linalg.solve(b2, b1) #Row vectors
     #Multiply T by x1
-    x2 = np.dot( T, x1 ) #Column vector
+    x2 = np.dot(T, x1) #Column vector
     #x2 = T @ x1
     return x2, T
 
@@ -42,7 +42,7 @@ def evaluateLagrangeBasis1D(variate, degree, basis_idx):
         if i != basis_idx:
             numerator = variate - nodes[i]
             denominator = nodes[basis_idx] - nodes[i]
-            val = val * numerator / denominator
+            val *= numerator / denominator
     return val
 
 def binomialCoefficients(n, k): #n is equal to degree of polynomial, k is the index of the basis function (n + 1 basis functions total)
@@ -93,7 +93,6 @@ class Test_changeOfBasis( unittest.TestCase ):
         v2 = b2 @ x2
         self.assertTrue( np.allclose( x2, np.array( [0.0, 1.0] ) ) )
         self.assertTrue( np.allclose( v1, v2 ) )
-
 
 class Test_evaluateMonomialBasis1D( unittest.TestCase ):
    def test_basisAtBounds( self ):
@@ -167,5 +166,4 @@ class Test_evaluateBernsteinBasis1D( unittest.TestCase ):
         self.assertAlmostEqual( first = evaluateBernsteinBasis1D( variate = +1, degree = 2, basis_idx = 0 ), second = 0.00, delta = 1e-12 )
         self.assertAlmostEqual( first = evaluateBernsteinBasis1D( variate = +1, degree = 2, basis_idx = 1 ), second = 0.00, delta = 1e-12 )
         self.assertAlmostEqual( first = evaluateBernsteinBasis1D( variate = +1, degree = 2, basis_idx = 2 ), second = 1.00, delta = 1e-12 )
-
           
