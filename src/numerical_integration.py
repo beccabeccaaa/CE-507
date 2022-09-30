@@ -2,7 +2,6 @@ import unittest
 import math
 import numpy as np
 import sympy
-import basis
 
 def getRiemannQuadrature(num_points):
     if num_points < 1:
