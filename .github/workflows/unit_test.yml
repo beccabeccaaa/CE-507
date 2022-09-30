@@ -41,4 +41,4 @@ jobs:
         #python3 -m unittest src/basis.py
         #python3 -m unittest src/legendre_basis.py
         #python3 -m unittest src/taylor_expansion.py
-        python3 -m unittest src/numerical_integration
+        python3 -m unittest src/numerical_integration.py
