@@ -19,7 +19,7 @@ def riemannQuadrature(fun, num_points):
         integral += fun(xQuadrature[i]) * wQuadrature[i]
     return integral
 
-def getGaussLegendreQuadrature(num_points):
+def getGaussLegendreQuadrature(num_points): #FIXME No unittest for this function
     if num_points == 1:
         xQuadrature = [0.0]
         wQuadrature = [2.0]
