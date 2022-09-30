@@ -1,14 +1,12 @@
 import unittest
 import math
 import sympy
-import scipy
 import numpy as np
 import matplotlib.pyplot as plt
 
 #a is the value at which the expansion is centered
 #x is the variable that remains
 #t is the taylor expansion
-
 def taylorExpansion(fun, a, order):
     x = list(fun.atoms(sympy.Symbol))[0]
     t = 0
