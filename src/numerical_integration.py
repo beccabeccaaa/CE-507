@@ -5,63 +5,59 @@ import sympy
 
 def getRiemannQuadrature(num_points):
     if num_points < 1:
-        raise(Exception("num_points_MUST_BE_INTEGER_GEQ_1"))
-    num_bounds = num_points + 1
-    x = np.linspace(-1, 1, num_points + num_bounds)
-    xQuadrature = x[1::2] #Take every second index starting from index 1
-    wQuadrature = np.diff(x[0::2]) #Take every second index starting from index 0
+        raise(Exception("num_points_MUST_BE_INTEGER_GEQ_1")) #FIXME Why?
+    num_boundary_points = num_points + 1 #These points are on each side of each middle point
+    allPoints = np.linspace(-1, 1, num_points + num_boundary_points)
+    xQuadrature = allPoints[1::2] #Take every second index starting from index 1 (essentially, all the midpoints)
+    wQuadrature = np.diff(allPoints[0::2]) #Take every second index starting from index 0, take distance between(essentially, the distance between all the points on the side of each midpoint)
     return xQuadrature, wQuadrature
 
 def riemannQuadrature(fun, num_points):
-    xQuadrature, wQuadrature = getRiemannQuadrature(num_points = num_points)
+    xQuadrature, wQuadrature = getRiemannQuadrature(num_points)
     integral = 0.0
-    for i in range( 0, num_points ):
+    for i in range(0, num_points):
         integral += fun(xQuadrature[i]) * wQuadrature[i]
     return integral
 
 def getGaussLegendreQuadrature(num_points):
     if num_points == 1:
-        x = [ 0.0 ]
-        w = [ 2.0 ]
+        xQuadrature = [0.0]
+        wQuadrature = [2.0]
     elif num_points == 2:
-        x = [ -1.0 / math.sqrt(3), 
-              +1.0 / math.sqrt(3) ]
-
-        w = [ 1.0, 
-              1.0  ]
+        xQuadrature = [-1.0 / math.sqrt(3), 
+                        1.0 / math.sqrt(3)]
+        wQuadrature = [1.0, 
+                       1.0]
     elif num_points == 3:
-        x = [ -1.0 * math.sqrt(3.0 / 5.0), 
-               0.0, 
-              +1.0 * math.sqrt(3.0 / 5.0) ]
-
-        w = [ 5.0 / 9.0, 
-              8.0 / 9.0, 
-              5.0 / 9.0 ]
+        xQuadrature = [-1.0 * math.sqrt(3.0 / 5.0), 
+                        0.0, 
+                        1.0 * math.sqrt(3.0 / 5.0)]
+        wQuadrature = [5.0 / 9.0, 
+                       8.0 / 9.0, 
+                       5.0 / 9.0]
     elif num_points == 4:
-        x = [ -1.0 * math.sqrt( 3.0 / 7.0 + 2.0 / 7.0 * math.sqrt( 6.0 / 5.0 ) ),
-              -1.0 * math.sqrt( 3.0 / 7.0 - 2.0 / 7.0 * math.sqrt( 6.0 / 5.0 ) ),
-              +1.0 * math.sqrt( 3.0 / 7.0 - 2.0 / 7.0 * math.sqrt( 6.0 / 5.0 ) ),
-              +1.0 * math.sqrt( 3.0 / 7.0 + 2.0 / 7.0 * math.sqrt( 6.0 / 5.0 ) ) ]
-        
-        w = [ ( 18.0 - math.sqrt( 30.0 ) ) / 36.0,
-              ( 18.0 + math.sqrt( 30.0 ) ) / 36.0,
-              ( 18.0 + math.sqrt( 30.0 ) ) / 36.0,
-              ( 18.0 - math.sqrt( 30.0 ) ) / 36.0 ]
+        xQuadrature = [-1.0 * math.sqrt(3.0 / 7.0 + 2.0 / 7.0 * math.sqrt( 6.0 / 5.0 )),
+                       -1.0 * math.sqrt(3.0 / 7.0 - 2.0 / 7.0 * math.sqrt( 6.0 / 5.0 )),
+                        1.0 * math.sqrt(3.0 / 7.0 - 2.0 / 7.0 * math.sqrt( 6.0 / 5.0 )),
+                        1.0 * math.sqrt(3.0 / 7.0 + 2.0 / 7.0 * math.sqrt( 6.0 / 5.0 ))]
+        wQuadrature = [(18.0 - math.sqrt(30.0)) / 36.0,
+                       (18.0 + math.sqrt(30.0)) / 36.0,
+                       (18.0 + math.sqrt(30.0)) / 36.0,
+                       (18.0 - math.sqrt(30.0)) / 36.0]
     elif num_points == 5:
-        x = [ -1.0 / 3.0 * math.sqrt( 5.0 + 2.0 * math.sqrt( 10.0 / 7.0 ) ),
-              -1.0 / 3.0 * math.sqrt( 5.0 - 2.0 * math.sqrt( 10.0 / 7.0 ) ),
-               0.0,
-              +1.0 / 3.0 * math.sqrt( 5.0 - 2.0 * math.sqrt( 10.0 / 7.0 ) ),
-              +1.0 / 3.0 * math.sqrt( 5.0 + 2.0 * math.sqrt( 10.0 / 7.0 ) ) ]
-        
-        w = [ ( 322.0 - 13.0 * math.sqrt( 70.0 ) ) / 900.0,
-              ( 322.0 + 13.0 * math.sqrt( 70.0 ) ) / 900.0,
-                128.0 / 225.0,
-              ( 322.0 + 13.0 * math.sqrt( 70.0 ) ) / 900.0,
-              ( 322.0 - 13.0 * math.sqrt( 70.0 ) ) / 900.0, ]
+        xQuadrature = [-1.0 / 3.0 * math.sqrt(5.0 + 2.0 * math.sqrt(10.0 / 7.0)),
+                       -1.0 / 3.0 * math.sqrt( 5.0 - 2.0 * math.sqrt(10.0 / 7.0)),
+                       0.0,
+                       1.0 / 3.0 * math.sqrt(5.0 - 2.0 * math.sqrt(10.0 / 7.0 )),
+                       1.0 / 3.0 * math.sqrt(5.0 + 2.0 * math.sqrt(10.0 / 7.0))]
+        wQuadrature = [(322.0 - 13.0 * math.sqrt(70.0)) / 900.0,
+                       (322.0 + 13.0 * math.sqrt( 70.0 )) / 900.0,
+                        128.0 / 225.0,
+                       (322.0 + 13.0 * math.sqrt( 70.0 )) / 900.0,
+                       (322.0 - 13.0 * math.sqrt( 70.0 )) / 900.0,]
     else:
         raise( Exception( "num_points_MUST_BE_INTEGER_IN_[1-5]" ) )
-    return x, w
+    return xQuadrature, wQuadrature
 
 class Test_getRiemannQuadrature( unittest.TestCase ):
     def test_zero_points( self ):
