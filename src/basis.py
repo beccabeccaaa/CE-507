@@ -45,6 +45,8 @@ def evaluateLagrangeBasis1D(variate, degree, basis_idx):
             val *= numerator / denominator
     return val
 
+#Ask about math.comb
+
 def binomialCoefficients(n, k): #n is equal to degree of polynomial, k is the index of the basis function (n + 1 basis functions total)
     numerator = sympy.factorial(n)
     if k == 0:
@@ -167,3 +169,4 @@ class Test_evaluateBernsteinBasis1D( unittest.TestCase ):
         self.assertAlmostEqual( first = evaluateBernsteinBasis1D( variate = +1, degree = 2, basis_idx = 1 ), second = 0.00, delta = 1e-12 )
         self.assertAlmostEqual( first = evaluateBernsteinBasis1D( variate = +1, degree = 2, basis_idx = 2 ), second = 1.00, delta = 1e-12 )
           
+#unittest.main()
