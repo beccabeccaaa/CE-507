@@ -37,15 +37,13 @@ def plot(x, fun, domain, degreeValues, functionLabel):
     plt.show()
 
 def plotTaylorSin():
-    x = sympy.symbols('x')
     fun = sympy.sin(sympy.pi * x) #Create symbolic function
     domain = [-1, 1]
     degreeValues = np.array([0, 1, 3, 5, 7])
-    functionLabel = "sin(x)"
+    functionLabel = "sin(pi * x)"
     plot(x, fun, domain, degreeValues, functionLabel)
 
 def plotTaylorE():
-    x = sympy.symbols('x')
     fun = sympy.exp(x) #Create symbolic function
     domain = [-1, 1]
     degreeValues = np.array([0, 1, 2, 3, 4])
@@ -53,30 +51,48 @@ def plotTaylorE():
     plot(x, fun, domain, degreeValues, functionLabel)
 
 def plotTaylorErfc():
-    x = sympy.symbols('x')
     fun = sympy.erfc(x) #Create symbolic function
     domain = [-2, 2]
     degreeValues = np.array([0, 1, 3, 5, 7, 9, 11])
     functionLabel = "erfc(x)"
     plot(x, fun, domain, degreeValues, functionLabel)
 
-def plotErrorTaylorErfc():
-    x = sympy.symbols('x')
-    fun = sympy.erfc(x) #Create symbolic function
-    degreeValues = [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10]
+def plotError(x, fun, domain, degreeValues, functionLabel):
     error = [] #Initializes empty list to later append to
     for degree in degreeValues:
         t = taylorExpansion(fun, 0, degree)
-        domain = [-2, 2]
-        error.append(integrate.quad(sympy.lambdify(x, abs(fun - t)), domain[0], domain[1], limit = 100000)[0])
-    print(error)
-    fig,ax = plt.subplots()
-    ax.plot(degreeValues, error)
+        error.append(integrate.quad(sympy.lambdify(x, abs(fun - t)), domain[0], domain[1], limit = 1000)[0])
+        print("Error:", error)
+    #fig,ax = plt.subplots()
+    #ax.plot(degreeValues, error)
+    plt.plot(degreeValues, error, color = "black", label = functionLabel)
+    plt.legend(loc = "upper left", prop = {"size":6})
+    plt.xlabel('Order')
+    plt.ylabel('| Error |')
     plt.yscale("Log")
-    #plotError(x, fun, domain, degreeValues, functionLabel)
     plt.show()
 
-#Ask about math.comb
+def plotErrorTaylorSin():
+    fun = sympy.sin(sympy.pi * x) #Create symbolic function
+    domain = [-1, 1]
+    degreeValues = np.array([0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10])
+    functionLabel = "Error(sin(pi * x))"
+    plotError(x, fun, domain, degreeValues, functionLabel)
+
+
+def plotErrorTaylorE():
+    fun = sympy.exp(x) #Create symbolic function
+    domain = [-1, 1]
+    degreeValues = np.array([0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10])
+    functionLabel = "Error(e^x)"
+    plotError(x, fun, domain, degreeValues, functionLabel)
+
+def plotErrorTaylorErfc():
+    fun = sympy.erfc(x) #Create symbolic function
+    domain = [-2, 2]
+    degreeValues = np.array([0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10])
+    functionLabel = "Error(erfc(x))"
+    plotError(x, fun, domain, degreeValues, functionLabel)
 
 def plotMonomialBasis(highDegree):
     x = np.linspace(0, 1)
@@ -84,7 +100,10 @@ def plotMonomialBasis(highDegree):
         plt.plot(x, x**degree)
     plt.show()
 
-#plotTaylorSin()
+x = sympy.symbols('x')
+plotTaylorSin()
 #plotTaylorE()
 #plotTaylorErfc()
-plotErrorTaylorErfc()
+plotErrorTaylorSin()
+#plotErrorTaylorE()
+#plotErrorTaylorErfc
