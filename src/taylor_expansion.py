@@ -30,7 +30,6 @@ def plot(x, fun, domain, degreeValues, functionLabel):
     plt.xlabel('x')
     plt.ylabel('f(x)')
     plt.legend(loc = "upper left", prop = {"size":6})
-    #plt.legend(loc = 'upper center', bbox_to_anchor = (0.5, 1.15), ncol = 3, fancybox = True, shadow = True)
     plt.show()
 
 def plotTaylorSin():
@@ -60,8 +59,6 @@ def plotError(x, fun, domain, degreeValues, functionLabel):
         t = taylorExpansion(fun, 0, degree)
         error.append(integrate.quad(sympy.lambdify(x, abs(fun - t)), domain[0], domain[1], limit = 1000)[0])
         print("Error:", error)
-    #fig,ax = plt.subplots()
-    #ax.plot(degreeValues, error)
     plt.plot(degreeValues, error, color = "black", label = functionLabel)
     plt.legend(loc = "upper left", prop = {"size":6})
     plt.xlabel('Order')
