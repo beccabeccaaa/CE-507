@@ -73,7 +73,6 @@ def plotErrorTaylorSin():
     functionLabel = "Error(sin(pi * x))"
     plotError(x, fun, domain, degreeValues, functionLabel)
 
-
 def plotErrorTaylorE():
     fun = sympy.exp(x) #Create symbolic function
     domain = [-1, 1]
@@ -88,16 +87,10 @@ def plotErrorTaylorErfc():
     functionLabel = "Error(erfc(x))"
     plotError(x, fun, domain, degreeValues, functionLabel)
 
-def plotMonomialBasis(highDegree):
-    x = np.linspace(0, 1)
-    for degree in range(0, highDegree):
-        plt.plot(x, x**degree)
-    plt.show()
-
 x = sympy.symbols('x')
 plotTaylorSin()
-#plotTaylorE()
-#plotTaylorErfc()
+plotTaylorE()
+plotTaylorErfc()
 plotErrorTaylorSin()
 plotErrorTaylorE()
 plotErrorTaylorErfc()
