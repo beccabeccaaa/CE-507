@@ -5,16 +5,13 @@ import matplotlib.pyplot as plt
 import basis
 from scipy import integrate
 
-#a is the value at which the expansion is centered
-#x is the variable that remains
-#t is the taylor expansion
-def taylorExpansion(fun, a, order):
-    x = list(fun.atoms(sympy.Symbol))[0]
+def taylorExpansion(fun, center, order):
+    x = list(fun.atoms(sympy.Symbol))[0] #This is the variable in our function that carries through
     t = 0
     for i in range(0, order + 1):
         df = sympy.diff(fun, x, i) #Take derivative with variables (take the ith derivative of fun with respect to x) (Next line: and evaluate at a)
-        term = (df.subs(x, a) / sympy.factorial(i) ) * (x - a)**i
-        t += term
+        term = (df.subs(x, center) / sympy.factorial(i) ) * (x - center)**i
+        t += term #This is the Taylor expansion
         print(t)
     return t
 
@@ -105,5 +102,5 @@ plotTaylorSin()
 #plotTaylorE()
 #plotTaylorErfc()
 plotErrorTaylorSin()
-#plotErrorTaylorE()
-#plotErrorTaylorErfc
+plotErrorTaylorE()
+plotErrorTaylorErfc()
