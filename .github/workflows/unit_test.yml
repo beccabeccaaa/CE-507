@@ -38,5 +38,5 @@ jobs:
     - name: Test with unittest
       run: |
         ### Run your tests ###
-        #python3 -m unittest src/basis.py
+        python3 -m unittest src/basis.py
         python3 -m unittest src/quadrature.py
