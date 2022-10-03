@@ -67,7 +67,7 @@ def assembleLinearMomentFitSystem(degree, pts):
             A[i, j] = basis.evalLegendreBasis1D(degree = i, variate = pts)
     return A
 
-def solveLinearMomentFit(M, pts):
+def solveLinearMomentFit(M, pts): #Solved P * d = f for d
     degree = len(M) - 1
     A = assembleLinearMomentFitSystem(degree, pts)
     sol = scipy.optimize.lsq_linear(A, M)
@@ -78,48 +78,9 @@ def objFun(M, pts):
     degree = len( M ) - 1
     A = assembleLinearMomentFitSystem(degree, pts)
     w = solveLinearMomentFit(M, pts)
-    ## YOUR CODE GOES HERE
+    obj_val = np.squeeze(M - A @ w)
+    #print(A.shape, w.shape, obj_val.shape)
     return obj_val
-
-# def getGaussLegendreQuadrature(num_points): #FIXME No unittest for this function
-#     if num_points == 1:
-#         xQuadrature = [0.0]
-#         wQuadrature = [2.0]
-#     elif num_points == 2:
-#         xQuadrature = [-1.0 / math.sqrt(3), 
-#                         1.0 / math.sqrt(3)]
-#         wQuadrature = [1.0, 
-#                        1.0]
-#     elif num_points == 3:
-#         xQuadrature = [-1.0 * math.sqrt(3.0 / 5.0), 
-#                         0.0, 
-#                         1.0 * math.sqrt(3.0 / 5.0)]
-#         wQuadrature = [5.0 / 9.0, 
-#                        8.0 / 9.0, 
-#                        5.0 / 9.0]
-#     elif num_points == 4:
-#         xQuadrature = [-1.0 * math.sqrt(3.0 / 7.0 + 2.0 / 7.0 * math.sqrt( 6.0 / 5.0 )),
-#                        -1.0 * math.sqrt(3.0 / 7.0 - 2.0 / 7.0 * math.sqrt( 6.0 / 5.0 )),
-#                         1.0 * math.sqrt(3.0 / 7.0 - 2.0 / 7.0 * math.sqrt( 6.0 / 5.0 )),
-#                         1.0 * math.sqrt(3.0 / 7.0 + 2.0 / 7.0 * math.sqrt( 6.0 / 5.0 ))]
-#         wQuadrature = [(18.0 - math.sqrt(30.0)) / 36.0,
-#                        (18.0 + math.sqrt(30.0)) / 36.0,
-#                        (18.0 + math.sqrt(30.0)) / 36.0,
-#                        (18.0 - math.sqrt(30.0)) / 36.0]
-#     elif num_points == 5:
-#         xQuadrature = [-1.0 / 3.0 * math.sqrt(5.0 + 2.0 * math.sqrt(10.0 / 7.0)),
-#                        -1.0 / 3.0 * math.sqrt( 5.0 - 2.0 * math.sqrt(10.0 / 7.0)),
-#                        0.0,
-#                        1.0 / 3.0 * math.sqrt(5.0 - 2.0 * math.sqrt(10.0 / 7.0 )),
-#                        1.0 / 3.0 * math.sqrt(5.0 + 2.0 * math.sqrt(10.0 / 7.0))]
-#         wQuadrature = [(322.0 - 13.0 * math.sqrt(70.0)) / 900.0,
-#                        (322.0 + 13.0 * math.sqrt(70.0)) / 900.0,
-#                         128.0 / 225.0,
-#                        (322.0 + 13.0 * math.sqrt(70.0)) / 900.0,
-#                        (322.0 - 13.0 * math.sqrt(70.0)) / 900.0,]
-#     else:
-#         raise( Exception( "num_points_MUST_BE_INTEGER_IN_[1-5]" ) )
-#     return xQuadrature, wQuadrature
 
 unittest.main()
 
