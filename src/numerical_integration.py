@@ -2,12 +2,12 @@ import unittest
 import math
 import numpy as np
 import sympy
-#import scipy
+import scipy
 import basis
 
 def getRiemannQuadrature(num_points): #This function returns the abscissae and weights for Riemann quadrature
     if num_points < 1:
-        raise(Exception("num_points_MUST_BE_INTEGER_GEQ_1")) #FIXME Why?
+        raise(Exception("num_points_MUST_BE_INTEGER_GEQ_1"))
     num_boundary_points = num_points + 1 #These points are on each side of each middle point
     allPoints = np.linspace(-1, 1, num_points + num_boundary_points)
     xQuadrature = allPoints[1::2] #Take every second index starting from index 1 (essentially, all the midpoints)
