@@ -3,7 +3,9 @@ import math
 import numpy as np
 import sympy
 import scipy
-import basis
+#put if statement here
+#print(__name__)
+from src import basis
 
 def getRiemannQuadrature(num_points): #This function returns the abscissae and weights for Riemann quadrature
     if num_points < 1:
