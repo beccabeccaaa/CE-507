@@ -21,9 +21,9 @@ def riemannQuadrature(fun, num_points):
         integral += fun(xQuadrature[i]) * wQuadrature[i]
     return integral
 
-def getNewtonCotesQuadrature(num_points):
+def getNewtonCotesQuadrature(num_points): #These are found by using the Lagrange polynomials
     if (num_points < 1) or (num_points > 6):
-        raise(Exception("num_points_MUST_BE_INTEGER_IN_[1,6]"))
+        raise(Exception("num_points_MUST_BE_INTEGER_IN_[1, 6]"))
     if num_points == 1:
         xQuadrature = np.array([0.0])
         wQuadrature = np.array([2.0])
