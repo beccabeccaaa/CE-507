@@ -82,8 +82,6 @@ def objFun(M, pts):
     #print(A.shape, w.shape, obj_val.shape)
     return obj_val
 
-unittest.main()
-
 class Test_getRiemannQuadrature( unittest.TestCase ):
     def test_zero_points( self ):
         with self.assertRaises( Exception ) as context:
