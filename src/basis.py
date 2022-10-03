@@ -67,6 +67,7 @@ def binomialCoefficients(n, k): #n is equal to degree of polynomial, k is the in
 def evaluateBernsteinBasis1D(variate, degree, basis_idx): #Defined on interval [0, 1]
     #basis_idx = i (from book equation)
     #degree = p (from book equation)
+    variate = (1 + variate) * 0.5 #Change of basis from [-1, 1] to [0, 1]
     #coefficient = binomialCoefficients(degree + 1, basis_idx)
     coefficient = math.comb(degree, basis_idx)
     val = coefficient * (variate**basis_idx) * (1 - variate)**(degree - basis_idx)
