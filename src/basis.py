@@ -128,7 +128,6 @@ def plotThirdFunction():
 plotFirstFunction()
 #plotSecondFunction()
 #plotThirdFunction()
-unittest.main()
 
 class Test_changeOfBasis( unittest.TestCase ):
     def test_standardR2BasisRotate( self ):
