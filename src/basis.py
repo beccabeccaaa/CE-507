@@ -2,6 +2,7 @@ import unittest
 import math
 import numpy as np
 import sympy
+import matplotlib.pyplot as plt
 
 #b1 (C, Image basis)
 #b2 (D, Pre-image basis)
@@ -21,6 +22,15 @@ def changeOfBasis(b1, b2, x1):
 
 def evaluateMonomialBasis1D(degree, variate):
     return variate**degree
+
+def plotMonomialBasis(highDegree):
+    x = np.linspace(0, 1)
+    for degree in range(0, highDegree):
+        plt.plot(x, x**degree, label = "Degree " + str(degree))
+    plt.xlabel('x')
+    plt.ylabel('f(x)')
+    plt.legend(loc = "upper left", prop = {"size":6})
+    plt.show()
 
 def evalLegendreBasis1D(degree, variate): #Variate is like the x-value, or in this case, xi
     #set val here
@@ -45,8 +55,7 @@ def evaluateLagrangeBasis1D(variate, degree, basis_idx):
             val *= numerator / denominator
     return val
 
-#Ask about math.comb
-
+#Unneeded if math.comb is used in evaluateBernsteinBasis1D()
 def binomialCoefficients(n, k): #n is equal to degree of polynomial, k is the index of the basis function (n + 1 basis functions total)
     numerator = sympy.factorial(n)
     if k == 0:
@@ -58,9 +67,68 @@ def binomialCoefficients(n, k): #n is equal to degree of polynomial, k is the in
 def evaluateBernsteinBasis1D(variate, degree, basis_idx): #Defined on interval [0, 1]
     #basis_idx = i (from book equation)
     #degree = p (from book equation)
-    coefficient = binomialCoefficients(degree + 1, basis_idx)
+    #coefficient = binomialCoefficients(degree + 1, basis_idx)
+    coefficient = math.comb(degree, basis_idx)
     val = coefficient * (variate**basis_idx) * (1 - variate)**(degree - basis_idx)
     return val
+
+#Homework question 43
+def plotFirstFunction():
+    x = np.linspace(-1, 1, 1000)
+    #Original:
+    #plt.plot(x, 4 * x**0, label = "M_0")
+    #plt.plot(x, 2 * x, label = "M_1")
+    #plt.plot(x, 2 * x**1 + 4 * x**0, color = "black", label = "M(x)")
+
+    #Lagrange:
+    # plt.plot(x, 1 - x, label = "L_0")
+    # plt.plot(x, 3 + 3 * x, label = "L_1")
+    # plt.plot(x, 2 * x + 4, color = "black", label = "L(x)")
+
+    #Legendre:
+    #plt.plot(x, 4 * x**0, label = "P_0")
+    #plt.plot(x, 2 * x, label = "P_1")
+    #plt.plot(x, 2 * x + 4, color = "black", label = "P(x)")
+
+    #Bernstein:
+    plt.plot(x, 2 * (1- x), label = "B_0")
+    plt.plot(x, 6 * x, label = "B_1")
+    plt.plot(x, 6 * x + 2 * (1 - x), color = "black", label = "B(x)")
+
+    plt.plot()
+    plt.xlabel('x-axis')
+    plt.ylabel('y-axis')
+    plt.legend(loc = "upper left", prop = {"size":6})
+    plt.show()
+
+def plotSecondFunction():
+    x = np.linspace(-1, 1, 1000)
+    plt.plot(x, 5.0 / 2.0 * x**0, label = "M_0")
+    plt.plot(x, 3 * x**1, label = "M_1")
+    plt.plot(x, 2 * x**2, label = "M_2")
+    plt.plot(x, 2 * x**2 + 3 * x**1 + 5.0 / 2.0 * x**0, color = "black", label = "M(x)")
+    plt.xlabel('x-axis')
+    plt.ylabel('y-axis')
+    plt.legend(loc = "upper left", prop = {"size":6})
+    plt.show()
+
+def plotThirdFunction():
+    x = np.linspace(-1, 1, 1000)
+    plt.plot(x, x**0, label = "M_0")
+    plt.plot(x, x**1, label = "M_1")
+    plt.plot(x, x**2, label = "M_2")
+    plt.plot(x, x**3, label = "M_3")
+    plt.plot(x, x**3 + x**2 + x**1 + x**0, color = "black", label = "M(x)")
+    plt.xlabel('x-axis')
+    plt.ylabel('y-axis')
+    plt.legend(loc = "upper left", prop = {"size":6})
+    plt.show()
+
+#plotMonomialBasis(11)
+plotFirstFunction()
+#plotSecondFunction()
+#plotThirdFunction()
+unittest.main()
 
 class Test_changeOfBasis( unittest.TestCase ):
     def test_standardR2BasisRotate( self ):
@@ -169,4 +237,3 @@ class Test_evaluateBernsteinBasis1D( unittest.TestCase ):
         self.assertAlmostEqual( first = evaluateBernsteinBasis1D( variate = +1, degree = 2, basis_idx = 1 ), second = 0.00, delta = 1e-12 )
         self.assertAlmostEqual( first = evaluateBernsteinBasis1D( variate = +1, degree = 2, basis_idx = 2 ), second = 1.00, delta = 1e-12 )
           
-#unittest.main()
