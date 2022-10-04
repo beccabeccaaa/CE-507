@@ -63,20 +63,6 @@ def computeGaussLegendreQuadrature(n):
     w = solveLinearMomentFit(M, qp)
     return qp, w
 
-    # r = basis.rootsLegendreBasis( num_points )
-    # M = sympy.zeros( rows = num_points, cols = 1 )
-    # for row in range( 0, num_points ):
-    #     p, x = basis.symLegendreBasis( row )
-    #     M[ row ] = sympy.integrate( p, (x, -1, +1 ) )
-
-    # E = sympy.zeros( rows = num_points, cols = num_points )
-    # for row in range( 0, num_points ):
-    #     p, x = basis.symLegendreBasis( row )
-    #     for col in range( 0, len( r ) ):
-    #         E[ row, col ] = p.subs( x, r[ col ] )
-    # w = list( E.LUsolve( M ) )
-    # return r, w
-
 def assembleLinearMomentFitSystem(degree, pts):
     A = np.zeros(shape = (degree + 1, len(pts)), dtype = "double")
     for i in range(0, degree + 1):
