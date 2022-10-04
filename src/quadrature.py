@@ -54,7 +54,7 @@ def computeNewtonCotesQuadrature(fun, num_points):
         integral += fun(xQuadrature[i]) * wQuadrature[i]
     return integral
 
-def computeGaussLegendreQuadrature(n): #Could also pass in basis here as an input
+def computeGaussLegendreQuadrature(n): #Could also pass in basis here as an input; then can compute Gaussian quadrature for any basis
     M = np.zeros(2 * n, dtype = "double")
     M[0] = 2.0
     x0 = np.linspace(-1, 1, n)
@@ -67,7 +67,7 @@ def assembleLinearMomentFitSystem(degree, pts):
     A = np.zeros(shape = (degree + 1, len(pts)), dtype = "double")
     for i in range(0, degree + 1):
         for j in range(0, len(pts)):
-            A[i, j] = basis.evalLegendreBasis1D(degree = i, variate = pts[j]) #Change this line to any basis; possibly use if statement
+            A[i, j] = basis.evalLegendreBasis1D(degree = i, variate = pts[j]) #Change this line to any basis to broadly use computeGaussLegendreQuadrature(); possibly use if statement to check input in that function for which basis to evaluate
     return A
 
 def solveLinearMomentFit(M, pts): #Solved P * d = f for d
