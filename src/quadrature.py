@@ -3,9 +3,10 @@ import math
 import numpy as np
 import sympy
 import scipy
-#put if statement here
-#print(__name__)
-from src import basis
+if __name__ == "src.quadrature":
+    from src import basis
+elif __name__ == "quadrature":
+    import basis
 
 def getRiemannQuadrature(num_points): #This function returns the abscissae and weights for Riemann quadrature
     if num_points < 1:
@@ -57,10 +58,24 @@ def computeGaussLegendreQuadrature(n):
     M = np.zeros(2 * n, dtype = "double")
     M[0] = 2.0
     x0 = np.linspace(-1, 1, n)
-    sol = scipy.optimize.least_squares(lambda x : objFun(M, x), x0, bounds = (-1, 1), ftol = 1e-14, xtol = 1e-14, gtol = 1e-14)
+    sol = scipy.optimize.least_squares(lambda x : objFun( M, x ), x0, bounds = (-1, 1), ftol = 1e-14, xtol = 1e-14, gtol = 1e-14)
     qp = sol.x
     w = solveLinearMomentFit(M, qp)
     return qp, w
+
+    # r = basis.rootsLegendreBasis( num_points )
+    # M = sympy.zeros( rows = num_points, cols = 1 )
+    # for row in range( 0, num_points ):
+    #     p, x = basis.symLegendreBasis( row )
+    #     M[ row ] = sympy.integrate( p, (x, -1, +1 ) )
+
+    # E = sympy.zeros( rows = num_points, cols = num_points )
+    # for row in range( 0, num_points ):
+    #     p, x = basis.symLegendreBasis( row )
+    #     for col in range( 0, len( r ) ):
+    #         E[ row, col ] = p.subs( x, r[ col ] )
+    # w = list( E.LUsolve( M ) )
+    # return r, w
 
 def assembleLinearMomentFitSystem(degree, pts):
     A = np.zeros(shape = (degree + 1, len(pts)), dtype = "double")
