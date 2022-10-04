@@ -24,9 +24,9 @@ def riemannQuadrature(fun, num_points):
         integral += fun(xQuadrature[i]) * wQuadrature[i]
     return integral
 
-def getNewtonCotesQuadrature(num_points): #These are found by using the Lagrange polynomials
+def getNewtonCotesQuadrature(num_points): #These are found by using the Lagrange polynomials; only use up to num_points = 6 because runge pheonomenon causes oscillation between points which leads to inaccurate values
     if (num_points < 1) or (num_points > 6):
-        raise(Exception("num_points_MUST_BE_INTEGER_IN_[1, 6]"))
+        raise(Exception("num_points_MUST_BE_INTEGER_IN_[1,6]"))
     if num_points == 1:
         xQuadrature = np.array([0.0])
         wQuadrature = np.array([2.0])
@@ -54,11 +54,11 @@ def computeNewtonCotesQuadrature(fun, num_points):
         integral += fun(xQuadrature[i]) * wQuadrature[i]
     return integral
 
-def computeGaussLegendreQuadrature(n):
+def computeGaussLegendreQuadrature(n): #Could also pass in basis here as an input
     M = np.zeros(2 * n, dtype = "double")
     M[0] = 2.0
     x0 = np.linspace(-1, 1, n)
-    sol = scipy.optimize.least_squares(lambda x : objFun( M, x ), x0, bounds = (-1, 1), ftol = 1e-14, xtol = 1e-14, gtol = 1e-14)
+    sol = scipy.optimize.least_squares(lambda x : objFun(M, x), x0, bounds = (-1, 1), ftol = 1e-14, xtol = 1e-14, gtol = 1e-14)
     qp = sol.x
     w = solveLinearMomentFit(M, qp)
     return qp, w
@@ -67,7 +67,7 @@ def assembleLinearMomentFitSystem(degree, pts):
     A = np.zeros(shape = (degree + 1, len(pts)), dtype = "double")
     for i in range(0, degree + 1):
         for j in range(0, len(pts)):
-            A[i, j] = basis.evalLegendreBasis1D(degree = i, variate = pts)
+            A[i, j] = basis.evalLegendreBasis1D(degree = i, variate = pts[j]) #Change this line to any basis; possibly use if statement
     return A
 
 def solveLinearMomentFit(M, pts): #Solved P * d = f for d
