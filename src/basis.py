@@ -82,9 +82,9 @@ def plotFirstFunction():
     #plt.plot(x, 2 * x**1 + 4 * x**0, color = "black", label = "M(x)")
 
     #Lagrange:
-    # plt.plot(x, 1 - x, label = "L_0")
-    # plt.plot(x, 3 + 3 * x, label = "L_1")
-    # plt.plot(x, 2 * x + 4, color = "black", label = "L(x)")
+    #plt.plot(x, 1 - x, label = "L_0")
+    #plt.plot(x, 3 + 3 * x, label = "L_1")
+    #plt.plot(x, 2 * x + 4, color = "black", label = "L(x)")
 
     #Legendre:
     #plt.plot(x, 4 * x**0, label = "P_0")
@@ -92,11 +92,10 @@ def plotFirstFunction():
     #plt.plot(x, 2 * x + 4, color = "black", label = "P(x)")
 
     #Bernstein:
-    plt.plot(x, 2 * (1- x), label = "B_0")
-    plt.plot(x, 6 * x, label = "B_1")
-    plt.plot(x, 6 * x + 2 * (1 - x), color = "black", label = "B(x)")
+    plt.plot(x, 1 - x, label = "B_0")
+    plt.plot(x, 3 + 3 * x, label = "B_1")
+    plt.plot(x, 2 * x + 4, color = "black", label = "B(x)")
 
-    plt.plot()
     plt.xlabel('x-axis')
     plt.ylabel('y-axis')
     plt.legend(loc = "upper left", prop = {"size":6})
@@ -126,7 +125,7 @@ def plotThirdFunction():
     plt.show()
 
 #plotMonomialBasis(11)
-plotFirstFunction()
+#plotFirstFunction()
 #plotSecondFunction()
 #plotThirdFunction()
 
