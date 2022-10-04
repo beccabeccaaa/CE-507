@@ -14,7 +14,7 @@ Download from git:
 Run unit test on code:
     python3 -m unittest <path/to/file>  
         Example: python3 -m unittest src/basis.py
-
+        Example: python3 -m unittest quadrature.py
 Show/hide hidden files in Finder:
     (shift) >> (command) >> (.)
 
